@@ -1,0 +1,124 @@
+{
+  "name": "Eterna - Find Your Perfect Match",
+  "short_name": "Eterna",
+  "description": "Connect with people who share your interests and values. Find meaningful relationships with AI-powered matching.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ec4899",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["lifestyle", "social", "dating"],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-72x72.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-96x96.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-128x128.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-144x144.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-152x152.svg",
+      "sizes": "152x152",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384x384.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Discover",
+      "short_name": "Discover",
+      "description": "Find new matches",
+      "url": "/dashboard",
+      "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+      ]
+    },
+    {
+      "name": "Matches",
+      "short_name": "Matches",
+      "description": "View your conversations",
+      "url": "/matches",
+      "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+      ]
+    },
+    {
+      "name": "Profile",
+      "short_name": "Profile",
+      "description": "Edit your profile",
+      "url": "/profile/edit",
+      "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+      ]
+    },
+    {
+      "name": "Search",
+      "short_name": "Search",
+      "description": "Advanced search",
+      "url": "/search",
+      "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+      ]
+    }
+  ],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"]
+}

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#f43f5e;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="heartGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.95" />
+    </linearGradient>
+    <filter id="glow512">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background circle with shadow -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGradient512)" filter="url(#shadow)"/>
+
+  <!-- Heart icon with glow effect -->
+  <path d="M256 426.7c-70.7-62.7-117.3-118.7-117.3-170.7 0-32 12-61.3 33.3-84C206.7 139.3 229.3 128 256 128s49.3 11.3 84 44c21.3 22.7 33.3 52 33.3 84 0 52-46.7 108-117.3 170.7z" 
+        fill="url(#heartGradient512)" 
+        filter="url(#glow512)"/>
+  
+  <!-- Heart outline -->
+  <path d="M256 426.7c-70.7-62.7-117.3-118.7-117.3-170.7 0-32 12-61.3 33.3-84C206.7 139.3 229.3 128 256 128s49.3 11.3 84 44c21.3 22.7 33.3 52 33.3 84 0 52-46.7 108-117.3 170.7z" 
+        fill="none" 
+        stroke="#ec4899" 
+        stroke-width="6" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <!-- Enhanced sparkle effects */
+  <circle cx="160" cy="186" r="6" fill="#ffffff" opacity="0.9"/>
+  <circle cx="352" cy="200" r="4" fill="#ffffff" opacity="0.7"/>
+  <circle cx="200" cy="120" r="3" fill="#ffffff" opacity="0.8"/>
+  <circle cx="320" cy="133" r="5" fill="#ffffff" opacity="0.6"/>
+  <circle cx="120" cy="293" r="3" fill="#ffffff" opacity="0.5"/>
+  <circle cx="373" cy="320" r="4" fill="#ffffff" opacity="0.7"/>
+  <circle cx="426" cy="240" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="80" cy="240" r="4" fill="#ffffff" opacity="0.5"/>
+  <circle cx="100" cy="160" r="2" fill="#ffffff" opacity="0.6"/>
+  <circle cx="400" cy="300" r="3" fill="#ffffff" opacity="0.5"/>
+
+  <!-- Additional decorative elements -->
+  <path d="M180 100 L190 110 L180 120 L170 110 Z" fill="#ffffff" opacity="0.6"/>
+  <path d="M340 360 L350 370 L340 380 L330 370 Z" fill="#ffffff" opacity="0.5"/>
+</svg>

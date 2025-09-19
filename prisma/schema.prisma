@@ -1,0 +1,266 @@
+// Dating App Database Schema
+// Comprehensive schema for user management, profiles, matching, and messaging
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dating-app.db"
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String?
+  name        String?
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // OAuth accounts
+  accounts    Account[]
+  sessions    Session[]
+  
+  // Dating app specific
+  profile     Profile?
+  sentLikes   Like[]    @relation("LikeSender")
+  receivedLikes Like[]  @relation("LikeReceiver")
+  matches     Match[]   @relation("MatchUser")
+  matchedWith Match[]   @relation("MatchTarget")
+  sentMessages Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageReceiver")
+  reports     Report[]  @relation("ReportSender")
+  reportedBy  Report[]  @relation("ReportTarget")
+  notifications Notification[]
+  pushSubscriptions PushSubscription[]
+  subscriptions Subscription[]
+  payments Payment[]
+  
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String
+  bio         String?
+  age         Int
+  gender      String
+  location    String?
+  latitude    Float?
+  longitude   Float?
+  photos      Photo[]
+  interests   String? // JSON string of interests array
+  lookingFor  String? // JSON string of what they're looking for array
+  maxDistance Int      @default(50) // in kilometers
+  ageMin      Int      @default(18)
+  ageMax      Int      @default(65)
+  isVisible   Boolean  @default(true)
+  isOnline    Boolean  @default(false)
+  lastActive  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Photo {
+  id        String   @id @default(cuid())
+  profileId String
+  url       String
+  order     Int      @default(0)
+  isMain    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@map("photos")
+}
+
+model Like {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  isLike     Boolean  // true for like, false for pass
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("LikeSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("LikeReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@map("likes")
+}
+
+model Match {
+  id        String   @id @default(cuid())
+  userId    String
+  targetId  String
+  createdAt DateTime @default(now())
+  isActive  Boolean  @default(true)
+
+  user   User @relation("MatchUser", fields: [userId], references: [id], onDelete: Cascade)
+  target User @relation("MatchTarget", fields: [targetId], references: [id], onDelete: Cascade)
+  
+  messages Message[]
+
+  @@unique([userId, targetId])
+  @@map("matches")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  matchId   String
+  senderId  String
+  receiverId String
+  content   String
+  isRead    Boolean  @default(false)
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  match    Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  sender   User  @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User  @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  senderId  String
+  targetId  String
+  reason    String
+  details   String?
+  status    String   @default("pending") // pending, reviewed, resolved
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sender User @relation("ReportSender", fields: [senderId], references: [id], onDelete: Cascade)
+  target User @relation("ReportTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // like, match, message, etc.
+  title     String
+  message   String
+  data      String?  // JSON data for the notification
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model PushSubscription {
+  id               String   @id @default(cuid())
+  userId           String
+  endpoint         String   @unique
+  subscriptionData String   // JSON string of subscription data
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("push_subscriptions")
+}
+
+model SubscriptionPlan {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  price       Float
+  duration    Int      // in days
+  features    String   // JSON array of features
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@map("subscription_plans")
+}
+
+model Subscription {
+  id         String   @id @default(cuid())
+  userId     String
+  planId     String
+  status     String   @default("active") // active, expired, cancelled
+  startDate  DateTime @default(now())
+  endDate    DateTime
+  autoRenew  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan SubscriptionPlan @relation(fields: [planId], references: [id])
+  payments Payment[]
+
+  @@unique([userId, planId])
+  @@map("subscriptions")
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  subscriptionId String?
+  amount        Float
+  currency      String   @default("USD")
+  status        String   @default("pending") // pending, completed, failed, refunded
+  paymentMethod String   // stripe, paypal, etc.
+  transactionId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@map("payments")
+}
